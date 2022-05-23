@@ -31,6 +31,7 @@
     "arweave-account": "1.2.3",
     "arweave-graphql": "0.0.5",
     "arweave-wallet-connector": "0.0.29",
+    "formik": "2.2.9",
     "next": "12.1.6",
     "next-themes": "0.2.0",
     "react": "18.1.0",
