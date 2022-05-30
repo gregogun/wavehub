@@ -92,7 +92,7 @@ export const AppHeader = () => {
   };
 
   return (
-    <Flex css={{ p: '$5' }} justify="between">
+    <Flex css={{ p: '$5', boxShadow: '0 1px 0 0 $colors$slate6' }} justify="between">
       <Flex gap="4">
         <IconButton rounded="full">
           <ChevronLeftIcon />
