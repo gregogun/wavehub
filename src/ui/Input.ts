@@ -26,8 +26,12 @@ export const Input = styled('input', {
   br: '$md',
   color: '$text',
 
+  '&:hover': {
+    boxShadow: '0 0 0 1px $colors$slate8',
+  },
+
   '&:focus': {
-    boxShadow: 'inset 0 0 0 1px $colors$focusRing, 0 0 0 1px $colors$focusRing',
+    boxShadow: '0 0 0 2px $colors$slate8',
   },
 
   '&::placeholder': {

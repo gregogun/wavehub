@@ -147,6 +147,22 @@ export const Button = styled('button', {
         },
       },
     },
+    {
+      colorScheme: 'violet',
+      variant: 'solid',
+      css: {
+        color: '$violet12',
+        bg: '$violet9',
+
+        '&:hover': {
+          bg: '$violet10',
+        },
+
+        '&:active': {
+          bg: '$violet10',
+        },
+      },
+    },
   ],
 
   defaultVariants: {
