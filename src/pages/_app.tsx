@@ -1,4 +1,3 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { AuthProvider } from '@/modules/auth/AuthContext';
 import { ThemeProvider } from 'next-themes';
@@ -12,6 +11,10 @@ import { Box } from '@/ui/Box';
 const GlobalStyle = globalCss({
   'html, body, #root, #__next': {
     height: '100%',
+  },
+
+  a: {
+    textDecoration: 'none',
   },
 
   '#__next': {
