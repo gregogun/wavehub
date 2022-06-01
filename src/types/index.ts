@@ -53,3 +53,11 @@ export interface Verification {
   icon: string;
   percentage: number;
 }
+
+export interface SongUploadItems {
+  trackName: string;
+  artistName: string;
+  trackDescription: string;
+  audioData: ArrayBuffer;
+  coverImageData: ArrayBuffer;
+}
