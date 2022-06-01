@@ -5,7 +5,7 @@ import { Account } from '@/types';
 
 export const arweave = Arweave.init({
   host: 'localhost',
-  port: 1820,
+  port: 1984,
   protocol: 'http',
 });
 
