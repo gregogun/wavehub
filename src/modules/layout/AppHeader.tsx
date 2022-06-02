@@ -103,6 +103,9 @@ export const AppHeader = () => {
     case '/upload':
       pageTitle = 'Upload';
       break;
+    case '/profile':
+      pageTitle = 'Profile';
+      break;
     default:
       pageTitle = 'Page not found';
       break;
