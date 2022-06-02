@@ -345,12 +345,15 @@ export const UploadForm = () => {
 
   return (
     <Container css={{ p: '$8' }}>
-      <Flex gap="4" css={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Text>
-          {formik.values.artistName ? formik.values.artistName : 'Artist Name'} -{' '}
-          {formik.values.trackName ? formik.values.trackName : 'Song Name'}
-        </Text>
-        <audio src={audioUrl} controls />
+      <Flex direction="column" gap="3" css={{ alignSelf: 'start', alignItems: 'center' }}>
+        <Heading size="md">Track preview</Heading>
+        <Flex gap="4" css={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Text>
+            {formik.values.artistName ? formik.values.artistName : 'Artist Name'} -{' '}
+            {formik.values.trackName ? formik.values.trackName : 'Song Name'}
+          </Text>
+          <audio src={audioUrl} controls />
+        </Flex>
       </Flex>
       <Flex
         onSubmit={formik.handleSubmit}
