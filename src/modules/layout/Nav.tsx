@@ -63,15 +63,17 @@ export const Nav = () => {
       direction="column"
       css={{
         gap: '$10',
-        borderRight: '1px solid $colors$slate6',
         pl: '$8',
-        pr: '$10',
+        pr: '$20',
         pt: '$5',
+        bg: '$slateHi',
       }}
     >
-      <Box css={{ py: '$2' }}>
-        <Image width={140} height={32} objectFit="cover" src={src} alt="logo" />
-      </Box>
+      <Link href="/" passHref>
+        <Box as="a" css={{ py: '$2' }}>
+          <Image width={140} height={32} objectFit="cover" src={src} alt="logo" />
+        </Box>
+      </Link>
       <Flex
         direction="column"
         css={{
