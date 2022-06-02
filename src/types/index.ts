@@ -61,3 +61,13 @@ export interface SongUploadItems {
   audioData: ArrayBuffer;
   coverImageData: ArrayBuffer;
 }
+
+export interface SongInfo {
+  txid: string;
+  owner: string;
+  title: string;
+  artist: string;
+  audioTxId: string;
+  coverTxId: string;
+  error?: string;
+}
