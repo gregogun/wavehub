@@ -20,15 +20,23 @@ interface SongItemProps {
 export const SongItem = ({ artist, title, audioTxId, coverTxId }: SongItemProps) => {
   const coverLoader = ({ src }) => `${appConfig.gatewayUrl}/${coverTxId}`;
   return (
-    <Flex direction="column" gap="3">
-      <Box css={{ position: 'relative', br: '$md', overflow: 'hidden' }}>
+    <Flex direction="column" gap="3" css={{ p: '$8', bg: '$slate2', br: '$xl' }}>
+      <Box
+        css={{
+          position: 'relative',
+          br: '$md',
+          overflow: 'hidden',
+          width: 240,
+          height: 240,
+        }}
+      >
         <Image
           priority
           loader={coverLoader}
-          width={240}
-          height={240}
+          layout="fill"
           src={`${appConfig.gatewayUrl}/${coverTxId}`}
           objectFit="cover"
+          objectPosition="center"
         />
       </Box>
       <Box>
