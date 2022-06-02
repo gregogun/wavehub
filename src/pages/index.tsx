@@ -32,8 +32,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Container css={{ p: '$8' }}>
-        <Heading css={{ textAlign: 'center' }}>Discover</Heading>
-        <Flex css={{ flexWrap: 'wrap', p: '$5' }}>
+        <Flex gap="20" css={{ flexWrap: 'wrap', p: '$5' }}>
           {data?.map((data) => (
             <SongItem
               key={data.txid}

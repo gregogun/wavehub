@@ -28,6 +28,8 @@ import { useTheme } from 'next-themes';
 import { useAuth } from '@/modules/auth/AuthContext';
 import { config } from '@/utils/config';
 import { connect, getAccount } from '@/lib/api';
+import { Heading } from '@/ui/Heading';
+import { useRouter } from 'next/router';
 
 const ProfileImage = styled('img', {
   objectFit: 'cover',
@@ -66,6 +68,7 @@ const StyledCloseButton = styled(DialogPrimitive.Close, {
 });
 
 export const AppHeader = () => {
+  const router = useRouter();
   const { connecting, account, walletAddress, setState } = useAuth();
 
   const handleConnect = async () => {
@@ -91,16 +94,23 @@ export const AppHeader = () => {
     });
   };
 
+  let pageTitle;
+
+  switch (router.pathname) {
+    case '/':
+      pageTitle = 'Discover';
+      break;
+    case '/upload':
+      pageTitle = 'Upload';
+      break;
+    default:
+      pageTitle = 'Page not found';
+      break;
+  }
+
   return (
-    <Flex css={{ p: '$5', boxShadow: '0 1px 0 0 $colors$slate6' }} justify="between">
-      <Flex gap="4">
-        <IconButton rounded="full">
-          <ChevronLeftIcon />
-        </IconButton>
-        <IconButton rounded="full">
-          <ChevronRightIcon />
-        </IconButton>
-      </Flex>
+    <Flex css={{ p: '$5' }} justify="between">
+      <Heading as="h1">{pageTitle}</Heading>
       <Flex gap="4">
         <ThemeToggle />
         {connecting ? (
@@ -132,19 +142,23 @@ export const AppHeader = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent sideOffset={8}>
-              <DropdownMenuItem>
-                <Link href="/profile" passHref>
-                  <Box
-                    as="a"
-                    css={{ display: 'flex', alignItems: 'center', gap: '$2', lineHeight: 0 }}
-                  >
-                    <Box as="span">
-                      <PersonIcon />
-                    </Box>
-                    Profile
+              <Link href="/profile" passHref>
+                <DropdownMenuItem
+                  as="a"
+                  css={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '$2',
+                    lineHeight: 0,
+                  }}
+                  color="slate"
+                >
+                  <Box as="span">
+                    <PersonIcon />
                   </Box>
-                </Link>
-              </DropdownMenuItem>
+                  Profile
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem color="red" onClick={handleDisconnect}>
                 <Box as="span" css={{ display: 'inline-flex' }}>
                   <ExitIcon />

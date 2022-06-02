@@ -87,20 +87,12 @@ export const Nav = () => {
           </NavItem>
         </Link>
         {walletAddress && (
-          <>
-            <Link href="/" passHref>
-              <NavItem selected={router.pathname === '/library'}>
-                <StackIcon />
-                Library
-              </NavItem>
-            </Link>
-            <Link href="/upload" passHref>
-              <NavItem selected={router.pathname === '/upload'}>
-                <UploadIcon />
-                Upload
-              </NavItem>
-            </Link>
-          </>
+          <Link href="/upload" passHref>
+            <NavItem selected={router.pathname === '/upload'}>
+              <UploadIcon />
+              Upload
+            </NavItem>
+          </Link>
         )}
       </Flex>
     </Flex>
