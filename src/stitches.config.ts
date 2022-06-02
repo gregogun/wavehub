@@ -13,6 +13,14 @@ import {
   violetDark,
 } from '@radix-ui/colors';
 
+const slateHiContrast = {
+  slateHi: '#F0F3F4',
+};
+
+const slateHiContrastDark = {
+  slateHi: '#121314',
+};
+
 const spacing = {
   1: '0.25rem',
   2: '0.5rem',
@@ -50,6 +58,7 @@ export const { styled, css, config, theme, createTheme, reset, getCssText, globa
     theme: {
       colors: {
         ...slate,
+        ...slateHiContrast,
         ...blue,
         ...red,
         ...violet,
@@ -268,6 +277,7 @@ export const { styled, css, config, theme, createTheme, reset, getCssText, globa
 const darkModeConfig = {
   colors: {
     ...slateDark,
+    ...slateHiContrastDark,
     ...blueDark,
     ...redDark,
     ...violetDark,
