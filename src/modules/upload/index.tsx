@@ -14,8 +14,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/Tooltip';
 import Image from 'next/image';
 import { IconButton } from '@/ui/IconButton';
-import { arweave, webWallet } from '@/lib/api';
-import { addFunds, mineBlock } from '@/lib/utils';
+import { upload } from '@/lib/upload';
 
 const acceptedAudioFileNames = 'audio/mpeg, audio/wav, audio/x-aiff, audio/x-flac';
 const acceptedImageFileNames = 'image/png, image/jpeg, image/gif';
@@ -91,14 +90,6 @@ const FormRow = styled(Flex, {
   },
 });
 
-interface AudioFileName {
-  name: string;
-  size: number;
-  type: 'audio/mpeg' | 'audio/wav' | 'audio/x-aiff';
-}
-
-interface ImageFile {}
-
 interface FormProps {
   trackName: string;
   artistName: string;
@@ -153,66 +144,20 @@ export const UploadForm = () => {
       validateMediaUpload();
 
       if (audioFile && coverImage) {
-        upload();
+        upload(
+          formik.values.artistName,
+          formik.values.trackName,
+          formik.values.trackDescription,
+          audioData,
+          audioFile,
+          coverImageData,
+          coverImageFile
+        );
       }
 
       setSubmitting(false);
     },
   });
-
-  const upload = async () => {
-    try {
-      await addFunds(arweave, webWallet.address);
-      await mineBlock(arweave);
-      //upload image first
-      let coverImageTx = await arweave.createTransaction({ data: coverImageData });
-      coverImageTx.addTag('Content-Type', coverImageFile.type);
-
-      let imageResult = await webWallet.dispatch(coverImageTx);
-      console.log('image uploaded successfully', imageResult);
-
-      //upload audio data
-      let audioTx = await arweave.createTransaction({ data: audioData });
-      audioTx.addTag('App-Name', 'wavehub');
-      audioTx.addTag('Content-Type', audioFile.type);
-      audioTx.addTag('Version', '0.0.1');
-      audioTx.addTag('Title', formik.values.trackName);
-      audioTx.addTag('Artist', formik.values.artistName);
-      audioTx.addTag('Cover-Artwork', imageResult.id);
-
-      let audioResult = await webWallet.dispatch(audioTx);
-      console.log('audio uploaded successfully', audioResult);
-
-      let trackMetadataTx = await arweave.createTransaction({
-        data: Buffer.from(
-          JSON.stringify({
-            trackName: formik.values.trackName,
-            artistName: formik.values.artistName,
-            trackDescription: formik.values.trackDescription,
-            coverImage: imageResult.id,
-            trackAudio: audioResult.id,
-          })
-        ),
-      });
-      trackMetadataTx.addTag('App-Name', 'wavehub');
-      trackMetadataTx.addTag('Content-Type', 'application/json');
-      trackMetadataTx.addTag('Version', '0.0.1');
-      trackMetadataTx.addTag('Type', 'song');
-      trackMetadataTx.addTag('Title', formik.values.trackName);
-      trackMetadataTx.addTag('Artist', formik.values.artistName);
-      trackMetadataTx.addTag(
-        'Description',
-        formik.values.artistName ? formik.values.trackDescription : 'No description.'
-      );
-      trackMetadataTx.addTag('Cover-Artwork', imageResult.id);
-      trackMetadataTx.addTag('Audio-Source', audioResult.id);
-
-      let trackMetadataResult = await webWallet.dispatch(trackMetadataTx);
-      console.log('metadata uploaded successfully', trackMetadataResult);
-    } catch (error) {
-      throw new Error('Error:', error);
-    }
-  };
 
   const handleChange = (e: FormEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files[0];
