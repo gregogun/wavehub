@@ -178,7 +178,7 @@ export const UploadForm = () => {
       audioTx.addTag('Version', '0.0.1');
       audioTx.addTag('Title', formik.values.trackName);
       audioTx.addTag('Artist', formik.values.artistName);
-      audioTx.addTag('Cover-Artwork', coverImageTx.id);
+      audioTx.addTag('Cover-Artwork', imageResult.id);
 
       let audioResult = await webWallet.dispatch(audioTx);
       console.log('audio uploaded successfully', audioResult);
@@ -221,7 +221,7 @@ export const UploadForm = () => {
       if (file.type.includes('audio')) {
         try {
           if (file.size > 52428800) {
-            setAudioFileError('The file size is too big. Try uploading something below 10MB');
+            setAudioFileError('The file size is too big. Try uploading something below 50MB');
             throw new Error('The file size is too big');
           }
 
