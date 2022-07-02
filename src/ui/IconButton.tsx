@@ -18,7 +18,7 @@ export const IconButton = styled('button', {
   fontWeight: '$medium',
   lineHeight: 1,
 
-  '&:focus': {
+  '&:focus-visible': {
     outline: 'none',
     boxShadow: '0 0 0 2px $colors$blue8',
   },
@@ -94,6 +94,15 @@ export const IconButton = styled('button', {
     },
 
     size: {
+      none: {
+        p: '$1',
+        '&:hover': {
+          bg: 'transparent',
+        },
+        '&:active': {
+          bg: 'transparent',
+        },
+      },
       xs: {
         boxSize: '$6',
         fontSize: '$xl',

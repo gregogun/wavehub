@@ -7,12 +7,22 @@ import { createSongInfo } from '@/lib/api';
 import { SongInfo } from '@/types';
 import { Flex } from '@/ui/Flex';
 import { SongItem } from '@/modules/discover/songItem';
+import { AudioPlayer } from '@/modules/player';
+import { usePlayer } from '@/modules/player/context';
 
 const Home: NextPage = () => {
+  const { setTracklist, trackList } = usePlayer();
   const [data, setData] = useState<SongInfo[]>();
+
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (trackList) {
+      console.log(trackList);
+    }
+  });
 
   const getData = async () => {
     try {
@@ -24,6 +34,9 @@ const Home: NextPage = () => {
       });
       const data = results.transactions.edges.map((edge) => createSongInfo(edge.node));
       setData(data);
+      console.log(data);
+
+      // setTracklist(data);
     } catch (error) {
       throw new Error('Error:', error);
     }
@@ -32,17 +45,21 @@ const Home: NextPage = () => {
   return (
     <>
       <Container css={{ p: '$8' }}>
-        <Flex gap="20" css={{ flexWrap: 'wrap', p: '$5' }}>
-          {data?.map((data) => (
+        <Flex gap="10" css={{ flexWrap: 'wrap', p: '$5' }}>
+          {data?.map((songData) => (
             <SongItem
-              key={data.txid}
-              artist={data.artist}
-              title={data.title}
-              audioTxId={data.audioTxId}
-              coverTxId={data.coverTxId}
+              tracklist={data}
+              setTracklist={setTracklist}
+              key={songData.txid}
+              id={songData.txid}
+              artist={songData.artist}
+              title={songData.title}
+              audioTxId={songData.audioTxId}
+              coverTxId={songData.coverTxId}
             />
           ))}
         </Flex>
+        <AudioPlayer trackList={trackList} />
       </Container>
     </>
   );

@@ -1,10 +1,11 @@
 import { SongInfo } from '@/types';
-import { createContext, useContext, useReducer, useState } from 'react';
+import { createContext, useContext, useEffect, useReducer, useState } from 'react';
 import { playerReducer } from '../reducer';
 import { PlayerState } from '../types';
 
 const initialState: PlayerState = {
   currentTrack: 0,
+  currentTrackId: null,
   trackList: [],
   repeat: false,
   shuffle: false,
@@ -13,11 +14,13 @@ const initialState: PlayerState = {
 
 export const PlayerContext = createContext<{
   currentTrack: number;
+  currentTrackId: string;
   playing: boolean;
   repeat: boolean;
   shuffle: boolean;
   trackList: SongInfo[];
   setCurrentTrack?: (index: number) => void;
+  setCurrentTrackId?: (id: string) => void;
   setTracklist?: (tracklist: SongInfo[]) => void;
   togglePlaying?: () => void;
   prevTrack?: () => void;
@@ -25,6 +28,7 @@ export const PlayerContext = createContext<{
   handleTrackEnd?: () => void;
 }>({
   currentTrack: 0,
+  currentTrackId: null,
   playing: false,
   repeat: false,
   shuffle: false,
@@ -39,7 +43,17 @@ const PlayerProvider = ({ children }: PlayerProviderProps) => {
   //   const [state, setState] = useState<PlayerState>();
   const [state, dispatch] = useReducer(playerReducer, initialState);
 
+  useEffect(() => {
+    console.log(state.trackList);
+  }, [state.trackList]);
+
+  useEffect(() => {
+    console.log(state.currentTrack);
+  }, [state.currentTrack]);
+
   const setCurrentTrack = (index: number) => dispatch({ type: 'SET_CURRENT_SONG', data: index });
+
+  const setCurrentTrackId = (id: string) => dispatch({ type: 'SET_CURRENT_SONG_ID', data: id });
 
   const setTracklist = (tracklist: SongInfo[]) =>
     dispatch({ type: 'SET_SONGS_ARRAY', data: tracklist });
@@ -89,11 +103,13 @@ const PlayerProvider = ({ children }: PlayerProviderProps) => {
     <PlayerContext.Provider
       value={{
         currentTrack: state.currentTrack,
+        currentTrackId: state.currentTrackId,
         playing: state.playing,
         repeat: state.repeat,
         shuffle: state.shuffle,
         trackList: state.trackList,
         setCurrentTrack,
+        setCurrentTrackId,
         setTracklist,
         prevTrack,
         nextTrack,
