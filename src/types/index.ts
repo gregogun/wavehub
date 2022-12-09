@@ -67,7 +67,9 @@ export interface SongInfo {
   owner: string;
   title: string;
   artist: string;
+  duration: string;
   audioTxId: string;
   coverTxId: string;
+  uploadDate: string;
   error?: string;
 }

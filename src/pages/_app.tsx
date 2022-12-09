@@ -38,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             value={{ light: 'light-theme', dark: darkTheme.toString() }}
           >
             <Flex css={{ height: '100%' }}>
+              <title>wavehub</title>
               <Nav />
               <Box css={{ width: '100%' }}>
                 <AppHeader />

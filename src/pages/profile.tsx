@@ -8,7 +8,7 @@ import { Box } from '../ui/Box';
 import { Flex } from '../ui/Flex';
 import { Text } from '../ui/Text';
 import { Button } from '../ui/Button';
-import { config } from '@/utils/config';
+import { appConfig } from '@/config';
 import { useAuth } from '@/modules/auth/AuthContext';
 import { ProfileCardContainer } from '../components/ProfileCardContainer';
 import { styled } from '../stitches.config';
@@ -74,7 +74,7 @@ const Profile = () => {
           {account ? (
             <ProfileCardContainer css={{ my: '$10', mx: 'auto', maxW: 420, gap: '$8' }}>
               <Flex gap="6">
-                <ProfileImage src={`${config.gatewayUrl}/${account.profile.avatar}`} />
+                <ProfileImage src={`${appConfig.gatewayUrl}/${account.profile.avatar}`} />
                 <Flex direction="column" justify="between">
                   <Heading css={{ color: '$slate11' }} as="h3" size="xl">
                     {account?.profile.name}
@@ -91,7 +91,7 @@ const Profile = () => {
                         '&:hover': { boxShadow: '0 1px 0 0 $colors$slate6' },
                       }}
                       as="a"
-                      href={`${config.viewblockAddress}/${account?.profile.addr}`}
+                      href={`${appConfig.viewblockAddress}/${account?.profile.addr}`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -159,7 +159,7 @@ const Profile = () => {
                     variant="ghost"
                     css={{ bg: '$slate3', color: '$blue10', '&:hover': { color: '$blue11' } }}
                     as="a"
-                    href={`${config.twitterUrl}/${account?.profile.links.twitter}`}
+                    href={`${appConfig.twitterUrl}/${account?.profile.links.twitter}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -169,7 +169,7 @@ const Profile = () => {
                     variant="ghost"
                     css={{ bg: '$slate3', color: '$slate10', '&:hover': { color: '$slate11' } }}
                     as="a"
-                    href={`${config.githubUrl}/${account?.profile.links.twitter}`}
+                    href={`${appConfig.githubUrl}/${account?.profile.links.twitter}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -216,7 +216,7 @@ const Profile = () => {
               <Button
                 css={{ alignSelf: 'start' }}
                 as="a"
-                href={config.accountUrl}
+                href={appConfig.accountUrl}
                 target="_blank"
                 rel="noreferrer"
               >

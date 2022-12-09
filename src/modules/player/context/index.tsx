@@ -1,11 +1,12 @@
 import { SongInfo } from '@/types';
-import { createContext, useContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { playerReducer } from '../reducer';
 import { PlayerState } from '../types';
 
 const initialState: PlayerState = {
   currentTrack: 0,
   currentTrackId: null,
+  audioRef: null,
   trackList: [],
   repeat: false,
   shuffle: false,
@@ -15,6 +16,7 @@ const initialState: PlayerState = {
 export const PlayerContext = createContext<{
   currentTrack: number;
   currentTrackId: string;
+  audioRef: any;
   playing: boolean;
   repeat: boolean;
   shuffle: boolean;
@@ -22,13 +24,14 @@ export const PlayerContext = createContext<{
   setCurrentTrack?: (index: number) => void;
   setCurrentTrackId?: (id: string) => void;
   setTracklist?: (tracklist: SongInfo[]) => void;
-  togglePlaying?: () => void;
+  togglePlaying?: (playing?: boolean) => void;
   prevTrack?: () => void;
   nextTrack?: (index?: number) => void;
   handleTrackEnd?: () => void;
 }>({
   currentTrack: 0,
   currentTrackId: null,
+  audioRef: null,
   playing: false,
   repeat: false,
   shuffle: false,
@@ -40,16 +43,8 @@ interface PlayerProviderProps {
 }
 
 const PlayerProvider = ({ children }: PlayerProviderProps) => {
-  //   const [state, setState] = useState<PlayerState>();
+  const audioRef = useRef(null);
   const [state, dispatch] = useReducer(playerReducer, initialState);
-
-  useEffect(() => {
-    console.log(state.trackList);
-  }, [state.trackList]);
-
-  useEffect(() => {
-    console.log(state.currentTrack);
-  }, [state.currentTrack]);
 
   const setCurrentTrack = (index: number) => dispatch({ type: 'SET_CURRENT_SONG', data: index });
 
@@ -58,7 +53,13 @@ const PlayerProvider = ({ children }: PlayerProviderProps) => {
   const setTracklist = (tracklist: SongInfo[]) =>
     dispatch({ type: 'SET_SONGS_ARRAY', data: tracklist });
 
-  const togglePlaying = () => dispatch({ type: 'PLAYING', data: !state.playing });
+  const togglePlaying = (playing?: boolean) => {
+    if (playing) {
+      dispatch({ type: 'PLAYING', data: playing });
+    } else {
+      dispatch({ type: 'PLAYING', data: !state.playing });
+    }
+  };
 
   const prevTrack = () => {
     if (state.currentTrack == 0) {
@@ -104,6 +105,7 @@ const PlayerProvider = ({ children }: PlayerProviderProps) => {
       value={{
         currentTrack: state.currentTrack,
         currentTrackId: state.currentTrackId,
+        audioRef,
         playing: state.playing,
         repeat: state.repeat,
         shuffle: state.shuffle,

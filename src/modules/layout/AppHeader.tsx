@@ -26,7 +26,7 @@ import {
 import { abbreviateAddress } from '../../utils';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/modules/auth/AuthContext';
-import { config } from '@/utils/config';
+import { appConfig } from '@/config';
 import { connect, getAccount } from '@/lib/api';
 import { Heading } from '@/ui/Heading';
 import { useRouter } from 'next/router';
@@ -55,7 +55,14 @@ const ThemeToggle = () => {
   const mode = resolvedTheme === 'dark' ? 'light' : 'dark';
 
   return (
-    <IconButton variant="outline" aria-label="Toggle theme" rounded="full" onClick={toggleTheme}>
+    <IconButton
+      css={{ '& svg': { width: 13, height: 13 } }}
+      size="sm"
+      variant="outline"
+      aria-label="Toggle theme"
+      rounded="full"
+      onClick={toggleTheme}
+    >
       {mode === 'light' ? <SunIcon /> : <MoonIcon />}
     </IconButton>
   );
@@ -114,7 +121,7 @@ export const AppHeader = () => {
   return (
     <Flex css={{ p: '$5' }} justify="between">
       <Heading as="h1">{pageTitle}</Heading>
-      <Flex gap="4">
+      <Flex align="center" gap="4">
         <ThemeToggle />
         {connecting ? (
           <Button colorScheme="violet" rounded="full" variant="outline">
@@ -131,7 +138,7 @@ export const AppHeader = () => {
               >
                 {account ? (
                   <Flex as="span" align="center" gap="2">
-                    <ProfileImage src={`${config.gatewayUrl}/${account.profile.avatar}`} />
+                    <ProfileImage src={`${appConfig.gatewayUrl}/${account.profile.avatar}`} />
                     {account.profile.name}
                   </Flex>
                 ) : !account && walletAddress ? (

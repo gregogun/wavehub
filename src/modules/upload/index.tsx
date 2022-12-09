@@ -1,4 +1,4 @@
-import { styled } from '@/stitches.config';
+import { darkTheme, styled } from '@/stitches.config';
 import { Box } from '@/ui/Box';
 import { Button } from '@/ui/Button';
 import { Container } from '@/ui/Container';
@@ -15,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/Tooltip';
 import Image from 'next/image';
 import { IconButton } from '@/ui/IconButton';
 import { upload } from '@/lib/upload';
+import { usePlayer } from '../player/context';
 
 const acceptedAudioFileNames = 'audio/mpeg, audio/wav, audio/x-aiff, audio/x-flac';
 const acceptedImageFileNames = 'image/png, image/jpeg, image/gif';
@@ -97,6 +98,7 @@ interface FormProps {
 }
 
 export const UploadForm = () => {
+  const { setTracklist } = usePlayer();
   const [audioFile, setAudioFile] = useState<File>();
   const [audioUrl, setAudioUrl] = useState<string>();
   const [audioData, setAudioData] = useState<ArrayBuffer>();
@@ -105,11 +107,25 @@ export const UploadForm = () => {
   const [coverImageData, setCoverImageData] = useState<ArrayBuffer>();
   const [imageFileError, setImageFileError] = useState<string>();
   const [audioFileError, setAudioFileError] = useState<string>();
+  const [audioCtx, setAudioCtx] = useState<AudioContext>();
+  const [audioFileDuration, setAudioFileDuration] = useState<number>();
 
-  // useEffect(() => {
-  //   // check config is correct
-  //   console.log(webWallet.getArweaveConfig());
-  // }, []);
+  useEffect(() => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    setAudioCtx(audioContext);
+  }, []);
+
+  useEffect(() => {
+    async function getDuration() {
+      if (audioData) {
+        await audioCtx.decodeAudioData(audioData, function (buffer) {
+          console.log(buffer.duration);
+          setAudioFileDuration(buffer.duration);
+        });
+      }
+    }
+    getDuration();
+  }, [audioData]);
 
   const formik = useFormik<FormProps>({
     initialValues: {
@@ -143,16 +159,19 @@ export const UploadForm = () => {
       console.log(values);
       validateMediaUpload();
 
-      if (audioFile && coverImage) {
+      if (audioFile && audioFileDuration && coverImage) {
         upload(
           formik.values.artistName,
           formik.values.trackName,
           formik.values.trackDescription,
           audioData,
           audioFile,
+          audioFileDuration,
           coverImageData,
           coverImageFile
-        );
+        ).then(() => {
+          formik.resetForm();
+        });
       }
 
       setSubmitting(false);
@@ -183,7 +202,7 @@ export const UploadForm = () => {
           let reader = new FileReader();
           reader.onload = function () {
             if (reader.result) {
-              let blob;
+              let blob: Blob;
               let url;
               blob = new Blob([file], { type: 'audio/wav' });
               url = window.URL.createObjectURL(blob);
@@ -355,7 +374,7 @@ export const UploadForm = () => {
 
           <FormRow>
             <Label aria-required htmlFor="trackDescription">
-              About this track
+              Track Description
             </Label>
             <Textarea
               name="trackDescription"
@@ -428,7 +447,7 @@ export const UploadForm = () => {
                   </Span>
                 </TooltipTrigger>
                 <TooltipContent side="top" sideOffset={4}>
-                  {audioFile ? audioFile.name : 'No song data'}
+                  {audioFile ? audioFile.name : 'No audio data'}
                 </TooltipContent>
               </Tooltip>
             </StyledLabel>
@@ -490,15 +509,20 @@ export const UploadForm = () => {
             </FormRow>
           )}
 
-          <Button type="submit" rounded="full" variant="solid" colorScheme="violet">
+          <Button
+            css={{
+              color: '$slate1',
+              [`.${darkTheme} &`]: {
+                color: '$slate12',
+              },
+            }}
+            type="submit"
+            rounded="full"
+            variant="solid"
+            colorScheme="violet"
+          >
             Publish
           </Button>
-
-          {/* {imageURI && (
-          <Button as='a' href={imageURI} target='_blank' rel='noreferrer' rounded="full" variant="solid">
-            View artwork
-          </Button>
-        )} */}
         </Flex>
       </Flex>
     </Container>

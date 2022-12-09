@@ -22,9 +22,9 @@ type DialogProps = React.ComponentProps<typeof DialogPrimitive.Root> & {
   children: React.ReactNode;
 };
 
-export function Dialog({ children, ...props }: DialogProps) {
+export const Dialog = ({ children, ...props }: DialogProps) => {
   return <DialogPrimitive.Root {...props}>{children}</DialogPrimitive.Root>;
-}
+};
 
 const contentShow = keyframes({
   '0%': { opacity: 0, transform: 'translate(-50%, -48%) scale(.96)' },
@@ -32,7 +32,7 @@ const contentShow = keyframes({
 });
 
 const StyledContent = styled(DialogPrimitive.Content, {
-  br: '$2xl',
+  br: '$md',
   backgroundColor: '$slate1',
   boxShadow: '0px 0px 33px rgba(0, 0, 0, 0.08)',
   position: 'fixed',
@@ -42,7 +42,7 @@ const StyledContent = styled(DialogPrimitive.Content, {
   width: '100%',
   maxWidth: '550px',
   maxHeight: '85vh',
-  padding: '4rem 2rem 3rem',
+  p: '$6',
   overflow: 'scroll',
   '&:focus': { outline: 'none' },
 });

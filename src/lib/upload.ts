@@ -17,6 +17,7 @@ export const upload = async (
   trackDescription: string,
   audioData: ArrayBuffer,
   audioFile: File,
+  audioFileDuration: number,
   coverImageData: ArrayBuffer,
   coverImageFile: File
 ) => {
@@ -41,6 +42,7 @@ export const upload = async (
 
     let audioResult = await webWallet.dispatch(audioTx);
     console.log('audio uploaded successfully', audioResult);
+    console.log('duration', audioFileDuration);
 
     let trackMetadataTx = await arweave.createTransaction({
       data: Buffer.from(
@@ -62,10 +64,12 @@ export const upload = async (
     trackMetadataTx.addTag('Description', artistName ? trackDescription : 'No description.');
     trackMetadataTx.addTag('Cover-Artwork', imageResult.id);
     trackMetadataTx.addTag('Audio-Source', audioResult.id);
+    trackMetadataTx.addTag('Upload-Date', Date.now().toString());
+    trackMetadataTx.addTag('Duration', audioFileDuration.toString());
 
     let trackMetadataResult = await webWallet.dispatch(trackMetadataTx);
     console.log('metadata uploaded successfully', trackMetadataResult);
   } catch (error) {
-    throw new Error('Error:', error);
+    alert('There was an error trying to upload. Please try again.');
   }
 };

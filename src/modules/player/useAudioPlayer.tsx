@@ -26,6 +26,8 @@ export const useAudioPlayer = () => {
 
     audio?.addEventListener('volumechange', () => setCurrentVolume(audio?.volume));
 
+    audio?.addEventListener('pause', () => handleFade);
+
     // console.log(currentVolume);
 
     // React state listeners: update DOM on React state changes
@@ -58,6 +60,16 @@ export const useAudioPlayer = () => {
       setTrackProgress(null);
     }
   }, [currentTime]);
+
+  const fade = () => (audio.volume -= 0.1);
+
+  const handleFade = () => {
+    if (audio.volume > 0) {
+      setTimeout(fade, 2);
+    } else {
+      audio.pause;
+    }
+  };
 
   return {
     currentTime,

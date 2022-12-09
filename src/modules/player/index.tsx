@@ -35,15 +35,8 @@ interface AudioPlayerProps {
 }
 
 export const AudioPlayer = ({ trackList }: AudioPlayerProps) => {
-  const { currentTrack, nextTrack, prevTrack } = usePlayer();
+  const { currentTrack, nextTrack, prevTrack, togglePlaying, playing, audioRef } = usePlayer();
   const [isShuffled, setIsShuffled] = useState(false);
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    if (audioRef?.current) {
-      console.log(audioRef.current.readyState);
-    }
-  }, [audioRef]);
 
   const currentSong = trackList[currentTrack];
   const title = currentSong?.title;
@@ -61,11 +54,11 @@ export const AudioPlayer = ({ trackList }: AudioPlayerProps) => {
         bottom: 0,
       }}
     >
-      <Flex
-        align="center"
-        justify="between"
+      <Box
         css={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr 964px 1fr',
+          alignItems: 'center',
           p: '$4',
           bg: '$slate1',
           borderTop: '1px solid $colors$slate6',
@@ -364,8 +357,10 @@ export const AudioPlayer = ({ trackList }: AudioPlayerProps) => {
             ref={audioRef}
             src={`${appConfig.devGatewayUrl}/${audioSrc}`}
             autoPlay={false}
-            onClickNext={() => nextTrack(currentTrack)}
+            onClickNext={() => nextTrack()}
             onClickPrevious={prevTrack}
+            onPause={() => togglePlaying(false)}
+            onPlay={() => togglePlaying(true)}
             showJumpControls={false}
             showSkipControls
             showFilledVolume
@@ -407,7 +402,7 @@ export const AudioPlayer = ({ trackList }: AudioPlayerProps) => {
           />
         </Box>
         <Box />
-      </Flex>
+      </Box>
     </Box>
   );
 };

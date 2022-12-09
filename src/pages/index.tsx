@@ -18,12 +18,6 @@ const Home: NextPage = () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (trackList) {
-      console.log(trackList);
-    }
-  });
-
   const getData = async () => {
     try {
       const results = await arweaveGraphql('http://localhost:1984/graphql').getTransactions({
@@ -33,8 +27,9 @@ const Home: NextPage = () => {
         ],
       });
       const data = results.transactions.edges.map((edge) => createSongInfo(edge.node));
+      const dataTest = results.transactions.edges.map((edge) => console.log(edge));
       setData(data);
-      console.log(data);
+      console.log(dataTest);
 
       // setTracklist(data);
     } catch (error) {
@@ -56,6 +51,7 @@ const Home: NextPage = () => {
               title={songData.title}
               audioTxId={songData.audioTxId}
               coverTxId={songData.coverTxId}
+              owner={songData.owner}
             />
           ))}
         </Flex>

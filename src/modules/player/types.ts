@@ -17,6 +17,7 @@ export interface PlayerAction {
 export interface PlayerState {
   currentTrack: number;
   currentTrackId: string;
+  audioRef?: any;
   trackList: SongInfo[];
   shuffle: boolean;
   repeat: boolean;
